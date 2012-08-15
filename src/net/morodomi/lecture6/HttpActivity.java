@@ -25,8 +25,8 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 /**
- * Activity for Android Lecture 5
- * Controls AsyncTask and Dialog
+ * Activity for Android Lecture 6
+ * Use Http Connections
  * @author Masahiro Morodomi <morodomi at gmail.com>
  *
  */
