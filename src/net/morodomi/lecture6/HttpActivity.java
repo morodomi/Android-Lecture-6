@@ -77,17 +77,11 @@ public class HttpActivity extends Activity implements OnClickListener{
 	 * @author Masahiro Morodomi <morodomi at gmail.com>
 	 */
 	class AsyncHttpConnect extends AsyncTask<String, Void, HttpResponse> {
-		// save start and end time
-		private long startTime;
-		private long endTime;
-
 		@Override
 		protected void onPreExecute() {}
 
 		@Override
 		protected HttpResponse doInBackground(String... url) {
-			// saving start time
-			startTime = System.currentTimeMillis();
 			// prepare return object
 			HttpResponse response = null;
 			try {
@@ -104,7 +98,6 @@ public class HttpActivity extends Activity implements OnClickListener{
 			} catch(Exception e) {
 				Log.e("Lecture 6", e.getMessage(), e);
 			}
-			endTime = System.currentTimeMillis();
 			// passing the value to onPostExecute
 			return response;
 		}
@@ -119,15 +112,21 @@ public class HttpActivity extends Activity implements OnClickListener{
 				} catch (Exception e) {
 					Log.e("Lecture 6", e.getMessage(), e);
 				}
-				// parse JSON
+				/** parse JSON */
+				// create list object
 				List<String> list = new ArrayList<String>();
 				try {
+					// create json object
 					JSONObject json = new JSONObject(result);
+					// get results JSONArray
 					JSONArray results = json.getJSONArray("results");
 					for(int i = 0; i < results.length(); i++) {
+						// initializing string list
 						list.add("@" + results.getJSONObject(i).getString("from_user") + " - " + results.getJSONObject(i).getString("text"));
 					}
+					// create adapter
 					adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.listitem, R.id.tweet, list);
+					// set adapter to the ListView.
 					((ListView) findViewById(R.id.list)).setAdapter(adapter);
 				} catch (Exception e) {
 					Log.e("Lecture 6", e.getMessage(), e);
