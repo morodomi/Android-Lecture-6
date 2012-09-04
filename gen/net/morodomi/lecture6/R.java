@@ -14,9 +14,8 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int result=0x7f050002;
+        public static final int image=0x7f050001;
         public static final int start=0x7f050000;
-        public static final int time=0x7f050001;
     }
     public static final class layout {
         public static final int main=0x7f030000;
@@ -25,6 +24,7 @@ public final class R {
         public static final int app_name=0x7f040000;
         public static final int end_time=0x7f040003;
         public static final int finished=0x7f040005;
+        public static final int image=0x7f040008;
         public static final int loading=0x7f040006;
         public static final int ok=0x7f040007;
         public static final int result=0x7f040004;
