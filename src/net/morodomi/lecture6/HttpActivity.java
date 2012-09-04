@@ -1,5 +1,8 @@
 package net.morodomi.lecture6;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.HttpVersion;
@@ -13,6 +16,8 @@ import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -22,7 +27,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.TextView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 /**
  * Activity for Android Lecture 6
@@ -35,6 +41,7 @@ public class HttpActivity extends Activity implements OnClickListener{
 	private static final String TWITTER_URL = "http://search.twitter.com/search.json?q=tokyo";
 	private static final int TIMEOUT = 10000;
 
+	private ArrayAdapter<String> adapter;
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -105,7 +112,6 @@ public class HttpActivity extends Activity implements OnClickListener{
 		@Override
 		protected void onPostExecute(HttpResponse response) {
 			// display time difference
-			((TextView) findViewById(R.id.time)).setText("Time Diff: " + (endTime - startTime) + " ms");
 			if(response != null && response.getStatusLine().getStatusCode() == HttpStatus.SC_OK){
 				String result = null;
 				try {
@@ -113,7 +119,19 @@ public class HttpActivity extends Activity implements OnClickListener{
 				} catch (Exception e) {
 					Log.e("Lecture 6", e.getMessage(), e);
 				}
-				((TextView) findViewById(R.id.result)).setText("Result: \n" + result);
+				// parse JSON
+				List<String> list = new ArrayList<String>();
+				try {
+					JSONObject json = new JSONObject(result);
+					JSONArray results = json.getJSONArray("results");
+					for(int i = 0; i < results.length(); i++) {
+						list.add("@" + results.getJSONObject(i).getString("from_user") + " - " + results.getJSONObject(i).getString("text"));
+					}
+					adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.listitem, R.id.tweet, list);
+					((ListView) findViewById(R.id.list)).setAdapter(adapter);
+				} catch (Exception e) {
+					Log.e("Lecture 6", e.getMessage(), e);
+				}
 			}
 		}
 	}
